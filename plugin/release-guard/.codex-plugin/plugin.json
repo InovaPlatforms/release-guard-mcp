@@ -1,0 +1,27 @@
+{
+  "name": "release-guard",
+  "version": "0.1.0",
+  "description": "App Store release-readiness checks (build processing, version state, submission preflight, release-note lint, server-notification delivery) from inside Codex. Read-only by default.",
+  "author": {
+    "name": "James Coholan",
+    "url": "https://github.com/InovaPlatforms/release-guard-mcp"
+  },
+  "homepage": "https://github.com/InovaPlatforms/release-guard-mcp",
+  "license": "MIT",
+  "keywords": ["app store connect", "ios", "release", "app review", "testflight", "preflight"],
+  "skills": "./skills/",
+  "mcpServers": "./.mcp.json",
+  "interface": {
+    "displayName": "Release Guard",
+    "shortDescription": "Is this iOS release ready to submit?",
+    "longDescription": "Release Guard checks an App Store release from inside Codex: whether the uploaded build finished processing, where the version is in App Review, and a full preflight (What's New in every locale and free of banned claims, review notes, export compliance, in-app purchases waiting to be attached, build number vs AppVersion.xcconfig, release commit on main). It lints release notes against App Review guidelines and audits App Store Server Notification delivery. Every tool is read-only except a guarded submit that defaults to a dry run.",
+    "developerName": "James Coholan",
+    "category": "Developer Tools",
+    "capabilities": ["Read"],
+    "defaultPrompt": [
+      "Is 2.4.0 ready to submit for review?",
+      "Has my latest build finished processing?",
+      "Check these release notes for App Review problems"
+    ]
+  }
+}

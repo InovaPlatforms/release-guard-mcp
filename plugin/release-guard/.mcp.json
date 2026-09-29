@@ -1,0 +1,21 @@
+{
+  "mcpServers": {
+    "release_guard": {
+      "command": "release-guard-mcp",
+      "args": [],
+      "env_vars": [
+        "ASC_KEY_ID",
+        "ASC_ISSUER_ID",
+        "ASC_PRIVATE_KEY_PATH",
+        "ASC_APP_ID",
+        "ASC_BUNDLE_ID",
+        "ASC_IAP_KEY_ID",
+        "ASC_IAP_KEY_PATH",
+        "RELEASE_GUARD_REPO",
+        "RELEASE_GUARD_XCCONFIG",
+        "RELEASE_GUARD_POLICY",
+        "RELEASE_GUARD_BACKEND"
+      ]
+    }
+  }
+}

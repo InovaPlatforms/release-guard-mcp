@@ -1,0 +1,27 @@
+# Example project policy for a sports-analytics app (extends the default policy).
+# Point RELEASE_GUARD_POLICY at a file like this one.
+
+# Promotional text for this app never carries prices either.
+[limits]
+promotional_text = 170
+
+[[rules]]
+id = "outcome-guarantees"
+severity = "error"
+guideline = "5.3 Gaming, Gambling, and Lotteries / 2.3.1 Accurate Metadata"
+message = "Implies a guaranteed betting outcome. Describe analysis, not certainty."
+patterns = [
+  '\bguaranteed (win|winner|winners|profit|profits|picks?)\b',
+  '\block of the (day|week)\b',
+  '\bsure (bet|thing|win)s?\b',
+  "\\bcan'?t lose\\b",
+  '\brisk[- ]free\b',
+]
+
+[[rules]]
+id = "pricing-claims-promo"
+severity = "error"
+guideline = "2.3.7 Accurate Metadata"
+message = "No prices or discounts in promotional text for this app."
+patterns = ['\b\d{1,3}\s?% off\b', '\bdiscount(s|ed)?\b', '\bsale\b']
+fields = ["promotional_text"]

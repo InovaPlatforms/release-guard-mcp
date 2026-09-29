@@ -1,0 +1,94 @@
+# Default Release Guard lint policy.
+#
+# Each rule cites the App Review Guideline it protects
+# (https://developer.apple.com/app-store/review/guidelines/). Patterns are
+# case-insensitive Python regular expressions. A project policy file
+# (RELEASE_GUARD_POLICY) can disable rules by id, add rules, and change limits.
+
+[limits]
+# App Store Connect field limits, in characters.
+name = 30
+subtitle = 30
+promotional_text = 170
+keywords = 100
+description = 4000
+whats_new = 4000
+review_notes = 4000
+
+[[rules]]
+id = "placeholder-text"
+severity = "error"
+guideline = "2.1 App Completeness"
+message = "Placeholder or unfinished text. Remove it before submission."
+patterns = ['\blorem ipsum\b', '\bTODO\b', '\bTBD\b', '\bFIXME\b', '\[insert[^\]]*\]', '\bXXX+\b']
+
+[[rules]]
+id = "other-platforms"
+severity = "error"
+guideline = "2.3.10 Accurate Metadata"
+message = "Names another mobile platform or app store. App Store metadata must not reference them."
+patterns = ['\bandroid\b', '\bgoogle play\b', '\bplay store\b', '\bgalaxy store\b', '\bamazon appstore\b']
+fields = ["name", "subtitle", "promotional_text", "description", "keywords", "whats_new"]
+
+[[rules]]
+id = "external-purchase"
+severity = "error"
+guideline = "3.1.1 In-App Purchase"
+message = "Steers buyers to a payment path outside the App Store. Keep purchase steering out of store metadata."
+patterns = [
+  '\bstripe\b',
+  '\bweb checkout\b',
+  '\bpaypal\b',
+  '\bvenmo\b',
+  '\b(buy|subscribe|pay|purchase|upgrade)\b[^.\n]{0,30}\b(on|at|via|through|from) (our|the) (web ?site|site|web)\b',
+  '\bcheaper (on|at) (our|the) (web|site|website)\b',
+]
+fields = ["name", "subtitle", "promotional_text", "description", "keywords", "whats_new"]
+
+[[rules]]
+id = "pricing-claims"
+severity = "error"
+guideline = "2.3.7 Accurate Metadata"
+message = "Pricing or discount language. Apple rejects pricing information in these fields; announce offers in the app or in promotional text."
+patterns = ['\b\d{1,3}\s?% off\b', '\bdiscount(s|ed)?\b', '\bsale\b', '\bhalf price\b', '\bprice drop\b', '\bpromo code\b', '\blimited[- ]time offer\b', '\$\s?\d']
+fields = ["name", "subtitle", "keywords", "whats_new"]
+
+[[rules]]
+id = "pricing-in-description"
+severity = "warning"
+guideline = "2.3.7 Accurate Metadata"
+message = "Pricing language in the description. Prices vary by storefront and go stale; prefer describing features."
+patterns = ['\b\d{1,3}\s?% off\b', '\bdiscount(s|ed)?\b', '\bon sale\b', '\bhalf price\b', '\bpromo code\b']
+fields = ["description"]
+
+[[rules]]
+id = "beta-language"
+severity = "warning"
+guideline = "2.2 Beta Testing"
+message = "Beta or test wording. App Store builds must be final; betas belong in TestFlight."
+patterns = ['\bbeta\b', '\btestflight\b', '\btest build\b', '\bdemo version\b', '\btrial version\b']
+fields = ["name", "subtitle", "promotional_text", "description", "whats_new"]
+
+[[rules]]
+id = "unverifiable-claims"
+severity = "warning"
+guideline = "2.3.1 Accurate Metadata"
+message = "Ranking, superlative or guarantee claim that App Review may ask you to substantiate."
+patterns = ['#\s?1\b', '\bnumber one\b', '\bbest app\b', "\\bworld'?s best\\b", '\bguarantee(d|s)?\b', '\b100% (accurate|guaranteed)\b']
+fields = ["name", "subtitle", "promotional_text", "description", "keywords", "whats_new"]
+
+[[rules]]
+id = "apple-mentions"
+severity = "warning"
+guideline = "2.3 Accurate Metadata"
+message = "Mentions Apple or App Review in customer-facing text."
+patterns = ['\bapp review\b', '\bapproved by apple\b', '\bapple[- ](approved|endorsed)\b']
+fields = ["name", "subtitle", "promotional_text", "description", "whats_new"]
+
+[[rules]]
+id = "bare-urls"
+severity = "warning"
+guideline = "2.3 Accurate Metadata"
+message = "URL in release notes. Links are not clickable here; use the Support or Marketing URL fields."
+patterns = ['https?://\S+', '\bwww\.\S+']
+fields = ["whats_new", "promotional_text"]

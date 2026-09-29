@@ -1,0 +1,20 @@
+{
+  "name": "release-guard-local",
+  "interface": {
+    "displayName": "Release Guard (local)"
+  },
+  "plugins": [
+    {
+      "name": "release-guard",
+      "source": {
+        "source": "local",
+        "path": "./plugin/release-guard"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Developer Tools"
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+dist/
+build/
+*.egg-info/
+# Never commit keys or local run output
+*.p8
+*.pem
+.env
+.env.*
+local/
+evals/runs/
+portfolio/_raw/
