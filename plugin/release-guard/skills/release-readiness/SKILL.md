@@ -1,6 +1,6 @@
 ---
 name: release-readiness
-description: "Check whether an iOS App Store release is ready and walk it to App Review safely with the Release Guard tools. Use when the user asks if a build finished processing, where a version is in review, whether a version is ready to submit, to check release notes, or to submit a version for review."
+description: "App Store release work with the Release Guard tools. Use when the user shares App Store text to check (release notes / What's New, subtitle, promotional text, keywords), asks if a build finished processing, where a version is in App Review, whether a version is ready to submit, whether Apple's server notifications arrived, or asks to submit a version for review."
 ---
 
 # Release readiness
@@ -10,7 +10,7 @@ Use the `release_guard` MCP tools. Pick the narrowest tool that answers the ques
 - Upload finished? → `check_build_status` (marketing version like `2.88`, optional build number like `3`).
 - Where is it in review, what is live? → `check_version_state`.
 - Ready to submit, what is blocking? → `preflight_submission`. Pass `repo_path` when the user is working in the app's repository, so the build-number and commit-on-main checks run.
-- Draft release notes or metadata text → `lint_release_notes` with the right `field`.
+- Any App Store text the user shares or asks about (release notes, subtitle, promo text, keywords, "does this fit?") → `lint_release_notes` with the right `field`, before you give your own opinion. It applies the team's policy file and Apple's exact limits; web searches and memory do not.
 - Did Apple's subscription notifications reach our server? → `reconcile_server_notifications`.
 
 ## Submitting

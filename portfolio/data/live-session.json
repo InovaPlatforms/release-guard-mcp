@@ -1,0 +1,326 @@
+[
+  {
+    "type": "message",
+    "text": "I’ll use the release-readiness workflow to check App Review status, confirm build processing, and run the available preflight checks for DeepChamp 2.88."
+  },
+  {
+    "type": "command",
+    "command": "/bin/zsh -lc 'cat $CODEX_HOME/plugins/cache/release-guard-local/0.1.0/skills/release-readiness/SKILL.md'",
+    "exit_code": 1
+  },
+  {
+    "type": "command",
+    "command": "/bin/zsh -lc \"rg --files $TMPDIR/… | rg 'release-readiness/SKILL.md\"'$'\"' | head\"",
+    "exit_code": 0
+  },
+  {
+    "type": "command",
+    "command": "/bin/zsh -lc 'cat $CODEX_HOME/plugins/cache/release-guard-local/release-guard/0.1.0/skills/release-readiness/SKILL.md'",
+    "exit_code": 0
+  },
+  {
+    "type": "command",
+    "command": "/bin/zsh -lc \"pwd; rg --files -g 'AppVersion.xcconfig' -g 'AGENTS.md' -g '.git' | head -40; git rev-parse --show-toplevel\"",
+    "exit_code": 128
+  },
+  {
+    "type": "command",
+    "command": "/bin/zsh -lc 'ls -la; ls -la ~/Documents/GitHub/deepchamp-platform-ios | head'",
+    "exit_code": 0
+  },
+  {
+    "type": "message",
+    "text": "The local workspace is empty, so I’ll use Release Guard’s configured repository for the source checks. I’ll also check the review and processing states directly so those answers are explicit."
+  },
+  {
+    "type": "tool",
+    "server": "release_guard",
+    "tool": "preflight_submission",
+    "arguments": {
+      "version": "2.88"
+    },
+    "status": "completed",
+    "error": null,
+    "result": {
+      "app_id": "6742149750",
+      "version": "2.88",
+      "build_number": "1",
+      "verdict": "blocked",
+      "passed": 12,
+      "failed": 1,
+      "warned": 0,
+      "skipped": 0,
+      "blocking": [
+        "version_editable"
+      ],
+      "checks": [
+        {
+          "id": "version_exists",
+          "title": "App Store version exists",
+          "status": "pass",
+          "detail": "2.88 is WAITING_FOR_REVIEW.",
+          "fix": null,
+          "evidence": {
+            "version_id": "…b307"
+          }
+        },
+        {
+          "id": "version_editable",
+          "title": "Version is editable",
+          "status": "fail",
+          "detail": "WAITING_FOR_REVIEW (waiting_for_review) cannot be submitted.",
+          "fix": "Already in the review pipeline; wait, or remove it from review in App Store Connect before changing it.",
+          "evidence": {}
+        },
+        {
+          "id": "build_valid",
+          "title": "Build processed and VALID",
+          "status": "pass",
+          "detail": "Build 1 is VALID.",
+          "fix": null,
+          "evidence": {
+            "build_id": "…381c",
+            "uploaded": "2026-09-28T07:14:55-07:00"
+          }
+        },
+        {
+          "id": "build_attached",
+          "title": "Build attached to version",
+          "status": "pass",
+          "detail": "Build 1 is attached to 2.88.",
+          "fix": null,
+          "evidence": {}
+        },
+        {
+          "id": "export_compliance",
+          "title": "Export compliance answered",
+          "status": "pass",
+          "detail": "Build declares no non-exempt encryption.",
+          "fix": null,
+          "evidence": {}
+        },
+        {
+          "id": "whats_new_present",
+          "title": "What's New present",
+          "status": "pass",
+          "detail": "Present in the version's only locale (en-US).",
+          "fix": null,
+          "evidence": {}
+        },
+        {
+          "id": "whats_new_policy",
+          "title": "What's New free of banned claims",
+          "status": "pass",
+          "detail": "No policy findings across 1 locale (policy: default).",
+          "fix": null,
+          "evidence": {}
+        },
+        {
+          "id": "review_notes_present",
+          "title": "App Review notes present",
+          "status": "pass",
+          "detail": "2585 characters of review notes.",
+          "fix": null,
+          "evidence": {}
+        },
+        {
+          "id": "review_contact",
+          "title": "Reviewer contact and demo account",
+          "status": "pass",
+          "detail": "Contact details set and demo account provided.",
+          "fix": null,
+          "evidence": {}
+        },
+        {
+          "id": "iap_ready_to_submit",
+          "title": "In-app purchases attached",
+          "status": "pass",
+          "detail": "No unattached products (49 checked, 8 attached or in review).",
+          "fix": null,
+          "evidence": {
+            "ready_to_submit": [],
+            "attached_or_in_review": [
+              "com.deepsportsanalysis.dives.1",
+              "com.deepsportsanalysis.dives.14",
+              "com.deepsportsanalysis.dives.200",
+              "com.deepsportsanalysis.dives.32",
+              "com.deepsportsanalysis.dives.6",
+              "com.deepsportsanalysis.dives.90",
+              "com.deepsportsanalysis.dives.starter",
+              "com.deepsportsanalysis.gamedaypass"
+            ],
+            "needs_action": [],
+            "total_products": 49,
+            "truncated": false
+          }
+        },
+        {
+          "id": "no_conflicting_submission",
+          "title": "No other version in review",
+          "status": "pass",
+          "detail": "No open review submission holds a different version.",
+          "fix": null,
+          "evidence": {}
+        },
+        {
+          "id": "build_number_monotonic",
+          "title": "Build number monotonic vs AppVersion.xcconfig",
+          "status": "pass",
+          "detail": "Local 2.88 (1) is not behind the newest upload (1). Bump it before the next upload.",
+          "fix": null,
+          "evidence": {
+            "xcconfig": "james_app/Config/AppVersion.xcconfig",
+            "MARKETING_VERSION": "2.88",
+            "CURRENT_PROJECT_VERSION": "1",
+            "highest_uploaded": "1"
+          }
+        },
+        {
+          "id": "commit_on_main",
+          "title": "Release commit is on main",
+          "status": "pass",
+          "detail": "91c4… is contained in origin/main.",
+          "fix": null,
+          "evidence": {
+            "commit": "91c4…",
+            "ref": "origin/main",
+            "ref_sha": "91c4…"
+          }
+        }
+      ],
+      "mode": "read_only",
+      "generated_at": "2026-09-29T03:32:32Z"
+    }
+  },
+  {
+    "type": "tool",
+    "server": "release_guard",
+    "tool": "check_build_status",
+    "arguments": {
+      "version": "2.88",
+      "build_number": "1"
+    },
+    "status": "completed",
+    "error": null,
+    "result": {
+      "app_id": "6742149750",
+      "version": "2.88",
+      "requested_build_number": "1",
+      "verdict": "VALID",
+      "ready_to_attach": true,
+      "build": {
+        "build_id": "…381c",
+        "build_number": "1",
+        "processing_state": "VALID",
+        "uploaded_date": "2026-09-28T07:14:55-07:00",
+        "expired": false,
+        "uses_non_exempt_encryption": false,
+        "min_os_version": "17.0"
+      },
+      "other_builds": [],
+      "next_step": "Build 1 is VALID and can be attached to 2.88.",
+      "rate_limit_remaining": null
+    }
+  },
+  {
+    "type": "tool",
+    "server": "release_guard",
+    "tool": "check_version_state",
+    "arguments": {
+      "version": "2.88"
+    },
+    "status": "completed",
+    "error": null,
+    "result": {
+      "app_id": "6742149750",
+      "app_name": "DeepChamp: Live Sports Intel",
+      "requested_version": "2.88",
+      "version": {
+        "version_id": "…b307",
+        "version_string": "2.88",
+        "app_version_state": "WAITING_FOR_REVIEW",
+        "app_store_state": "WAITING_FOR_REVIEW",
+        "phase": "waiting_for_review",
+        "editable": false,
+        "release_type": "AFTER_APPROVAL",
+        "created_date": "2026-09-28T06:57:01-07:00",
+        "attached_build_number": "1",
+        "attached_build_state": "VALID"
+      },
+      "recent_versions": [
+        {
+          "version_id": "…b307",
+          "version_string": "2.88",
+          "app_version_state": "WAITING_FOR_REVIEW",
+          "app_store_state": "WAITING_FOR_REVIEW",
+          "phase": "waiting_for_review",
+          "editable": false,
+          "release_type": "AFTER_APPROVAL",
+          "created_date": "2026-09-28T06:57:01-07:00",
+          "attached_build_number": "1",
+          "attached_build_state": "VALID"
+        },
+        {
+          "version_id": "…7cad",
+          "version_string": "2.87",
+          "app_version_state": "READY_FOR_DISTRIBUTION",
+          "app_store_state": "READY_FOR_SALE",
+          "phase": "live",
+          "editable": false,
+          "release_type": "AFTER_APPROVAL",
+          "created_date": "2026-09-26T13:31:28-07:00",
+          "attached_build_number": "1",
+          "attached_build_state": "VALID"
+        },
+        {
+          "version_id": "…65f8",
+          "version_string": "2.85",
+          "app_version_state": "READY_FOR_DISTRIBUTION",
+          "app_store_state": "READY_FOR_SALE",
+          "phase": "replaced",
+          "editable": false,
+          "release_type": "AFTER_APPROVAL",
+          "created_date": "2026-09-25T10:22:52-07:00",
+          "attached_build_number": "1",
+          "attached_build_state": "VALID"
+        },
+        {
+          "version_id": "…8cd2",
+          "version_string": "2.84",
+          "app_version_state": "READY_FOR_DISTRIBUTION",
+          "app_store_state": "READY_FOR_SALE",
+          "phase": "replaced",
+          "editable": false,
+          "release_type": "AFTER_APPROVAL",
+          "created_date": "2026-09-24T06:00:03-07:00",
+          "attached_build_number": "2",
+          "attached_build_state": "VALID"
+        },
+        {
+          "version_id": "…2b5a",
+          "version_string": "2.82",
+          "app_version_state": "READY_FOR_DISTRIBUTION",
+          "app_store_state": "READY_FOR_SALE",
+          "phase": "replaced",
+          "editable": false,
+          "release_type": "AFTER_APPROVAL",
+          "created_date": "2026-09-22T23:11:44-07:00",
+          "attached_build_number": "2",
+          "attached_build_state": "VALID"
+        }
+      ],
+      "open_review_submissions": [
+        {
+          "submission_id": "…8acb",
+          "state": "WAITING_FOR_REVIEW",
+          "submitted_date": "2026-09-28T15:04:39.228Z"
+        }
+      ],
+      "next_step": "Submitted and waiting for App Review. Nothing to do but wait."
+    }
+  },
+  {
+    "type": "message",
+    "text": "**DeepChamp 2.88 (1) is waiting for App Review.** It has been submitted but is not yet in review; 2.87 remains live.\n\n**Build processing is complete.** Build 1 is `VALID` and attached to 2.88.\n\nThe full preflight returned **blocked: 12 checks passed, 1 failed**. The sole failure is that 2.88 is no longer editable because it is already in the review pipeline. There are no other preflight findings to fix. Wait for Apple’s review; if you need to change this submission, remove it from review in App Store Connect first. A preflight pass cannot guarantee Apple’s approval."
+  }
+]

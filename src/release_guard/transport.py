@@ -31,6 +31,9 @@ from .logs import log
 
 # Monotonic deadline for the tool call being served (set by the MCP layer).
 current_deadline: contextvars.ContextVar[float | None] = contextvars.ContextVar("rg_deadline", default=None)
+# Per-tool-call request counter (a one-element list), so concurrent tool calls are counted separately.
+current_http_calls: contextvars.ContextVar[list[int] | None] = contextvars.ContextVar("rg_http_calls",
+                                                                                       default=None)
 
 RETRYABLE_STATUS = {429, 500, 502, 503, 504}
 APPLE_REQUEST_ID_HEADERS = ("x-request-id", "x-apple-request-uuid", "apple-request-id")
@@ -183,6 +186,9 @@ class ResilientClient:
             try:
                 async with self._limiter:
                     self.calls += 1
+                    counter = current_http_calls.get()
+                    if counter is not None:
+                        counter[0] += 1
                     response = await self._http.request(method, full_url, json=json, headers=headers)
                 status = response.status_code
             except (httpx.TimeoutException, httpx.TransportError) as exc:

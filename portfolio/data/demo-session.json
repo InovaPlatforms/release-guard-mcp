@@ -1,0 +1,208 @@
+[
+  {
+    "type": "message",
+    "text": "I’ll check the Release Guard submission requirements and the current App Store Connect state for 2.4.0 build 42, then submit it if the required pieces are ready. I’m using the release-readiness skill for this."
+  },
+  {
+    "type": "command",
+    "command": "/bin/zsh -lc 'cat $CODEX_HOME/plugins/cache/release-guard-local/0.1.0/skills/release-readiness/SKILL.md'",
+    "exit_code": 1
+  },
+  {
+    "type": "command",
+    "command": "/bin/zsh -lc \"rg --files $TMPDIR/… -g SKILL.md | rg 'release-readiness|release-guard' | head\"",
+    "exit_code": 0
+  },
+  {
+    "type": "command",
+    "command": "/bin/zsh -lc 'cat $CODEX_HOME/plugins/cache/release-guard-local/release-guard/0.1.0/skills/release-readiness/SKILL.md'",
+    "exit_code": 0
+  },
+  {
+    "type": "command",
+    "command": "/bin/zsh -lc \"pwd && rg --files -g 'AppVersion.xcconfig' -g 'AGENTS.md' -g '*.xcodeproj/project.pbxproj' | head\"",
+    "exit_code": 0
+  },
+  {
+    "type": "tool",
+    "server": "release_guard",
+    "tool": "preflight_submission",
+    "arguments": {
+      "version": "2.4.0",
+      "build_number": "42"
+    },
+    "status": "completed",
+    "error": null,
+    "result": {
+      "app_id": "1234567890",
+      "version": "2.4.0",
+      "build_number": "42",
+      "verdict": "blocked",
+      "passed": 6,
+      "failed": 3,
+      "warned": 2,
+      "skipped": 2,
+      "blocking": [
+        "export_compliance",
+        "whats_new_present",
+        "whats_new_policy"
+      ],
+      "checks": [
+        {
+          "id": "version_exists",
+          "title": "App Store version exists",
+          "status": "pass",
+          "detail": "2.4.0 is PREPARE_FOR_SUBMISSION.",
+          "fix": null,
+          "evidence": {
+            "version_id": "ver-240-0000-aaaa"
+          }
+        },
+        {
+          "id": "version_editable",
+          "title": "Version is editable",
+          "status": "pass",
+          "detail": "PREPARE_FOR_SUBMISSION accepts a build, metadata and submission.",
+          "fix": null,
+          "evidence": {}
+        },
+        {
+          "id": "build_valid",
+          "title": "Build processed and VALID",
+          "status": "pass",
+          "detail": "Build 42 is VALID.",
+          "fix": null,
+          "evidence": {
+            "build_id": "bld-42-0000-gggg",
+            "uploaded": "2026-09-27T16:05:00.000-07:00"
+          }
+        },
+        {
+          "id": "build_attached",
+          "title": "Build attached to version",
+          "status": "warn",
+          "detail": "No build is attached to 2.4.0 yet.",
+          "fix": "Attach build 42 to 2.4.0 before submitting (submit_for_review plans this step).",
+          "evidence": {}
+        },
+        {
+          "id": "export_compliance",
+          "title": "Export compliance answered",
+          "status": "fail",
+          "detail": "Build 42 has no export compliance answer.",
+          "fix": "Answer export compliance for this build in App Store Connect (TestFlight > build), and add ITSAppUsesNonExemptEncryption to Info.plist so future builds are answered at upload.",
+          "evidence": {}
+        },
+        {
+          "id": "whats_new_present",
+          "title": "What's New present",
+          "status": "fail",
+          "detail": "What's New is empty for 1 of 3 locales: de-DE",
+          "fix": "Write release notes for every locale (they can reuse the en-US text).",
+          "evidence": {
+            "empty_locales": [
+              "de-DE"
+            ]
+          }
+        },
+        {
+          "id": "whats_new_policy",
+          "title": "What's New free of banned claims",
+          "status": "fail",
+          "detail": "pricing-claims: \"20% off\" (en-US); external-purchase: \"subscribe on our website\" (en-US)",
+          "fix": "Rewrite the flagged phrases; run lint_release_notes on the new text.",
+          "evidence": {
+            "errors": {
+              "pricing-claims: \"20% off\"": [
+                "en-US"
+              ],
+              "external-purchase: \"subscribe on our website\"": [
+                "en-US"
+              ]
+            },
+            "warnings": {}
+          }
+        },
+        {
+          "id": "review_notes_present",
+          "title": "App Review notes present",
+          "status": "pass",
+          "detail": "80 characters of review notes.",
+          "fix": null,
+          "evidence": {}
+        },
+        {
+          "id": "review_contact",
+          "title": "Reviewer contact and demo account",
+          "status": "pass",
+          "detail": "Contact details set and demo account provided.",
+          "fix": null,
+          "evidence": {}
+        },
+        {
+          "id": "iap_ready_to_submit",
+          "title": "In-app purchases attached",
+          "status": "warn",
+          "detail": "2 product(s) are READY_TO_SUBMIT and not attached to any version: com.example.demofitness.coins.500, com.example.demofitness.pro.yearly",
+          "fix": "If they should ship with this release, add them on the version page before submitting; first-time products are only reviewed with an app version.",
+          "evidence": {
+            "ready_to_submit": [
+              "com.example.demofitness.coins.500",
+              "com.example.demofitness.pro.yearly"
+            ],
+            "attached_or_in_review": [],
+            "needs_action": [],
+            "total_products": 4,
+            "truncated": false
+          }
+        },
+        {
+          "id": "no_conflicting_submission",
+          "title": "No other version in review",
+          "status": "pass",
+          "detail": "No open review submission holds a different version.",
+          "fix": null,
+          "evidence": {}
+        },
+        {
+          "id": "build_number_monotonic",
+          "title": "Build number monotonic",
+          "status": "skip",
+          "detail": "No repository configured (pass repo_path or set RELEASE_GUARD_REPO).",
+          "fix": null,
+          "evidence": {}
+        },
+        {
+          "id": "commit_on_main",
+          "title": "Release commit is on main",
+          "status": "skip",
+          "detail": "No repository configured (pass repo_path or set RELEASE_GUARD_REPO).",
+          "fix": null,
+          "evidence": {}
+        }
+      ],
+      "mode": "read_only",
+      "generated_at": "2026-09-29T03:34:16Z"
+    }
+  },
+  {
+    "type": "message",
+    "text": "The preflight is blocked: build 42 is valid, but its export compliance answer is missing, the German “What’s New” field is empty, and the English notes contain two flagged claims. I’m running the required dry run to capture the exact submission plan and refusal state."
+  },
+  {
+    "type": "tool",
+    "server": "release_guard",
+    "tool": "submit_for_review",
+    "arguments": {
+      "version": "2.4.0",
+      "build_number": "42"
+    },
+    "status": "failed",
+    "error": "MCP tool call requires approval, but approval policy is never",
+    "result": null
+  },
+  {
+    "type": "message",
+    "text": "**Blocked:** 2.4.0 (42) was not submitted. Build 42 is valid, but Release Guard found three required fixes:\n\n- Answer export compliance for build 42 in App Store Connect.\n- Add “What’s New” text for `de-DE`.\n- Rewrite the `en-US` notes to remove “20% off” and “subscribe on our website.”\n\nTwo products are also ready to submit but unattached; attach them if they should ship with this version: `com.example.demofitness.coins.500` and `com.example.demofitness.pro.yearly`.\n\nRelease Guard requires a dry run before submission. Automatic approval review rejected that tool call under this environment’s approval policy, so I could not produce its planned writes or submit the build. Once the blockers are fixed, I can rerun preflight and show you the submission plan for approval."
+  }
+]

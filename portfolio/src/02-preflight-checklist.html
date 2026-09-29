@@ -1,0 +1,68 @@
+<!doctype html><html lang='en'><head><meta charset='utf-8'><title>Preflight checklist</title><style>
+:root { --surface:#fcfcfb; --page:#f4f3ef; --ink:#0b0b0b; --ink2:#52514e; --muted:#898781;
+  --hair:#e1e0d9; --axis:#c3c2b7; --good:#0ca30c; --good-text:#006300; --warn:#fab219;
+  --crit:#d03b3b; --blue:#2a78d6; --blue-light:#86b6ef; --mono:"SF Mono", ui-monospace, Menlo, monospace;
+  --sans: system-ui, -apple-system, "Segoe UI", sans-serif; }
+* { box-sizing:border-box; margin:0; padding:0; }
+html, body { width:1600px; min-height:1000px; overflow:hidden; }
+body { background:var(--page); font-family:var(--sans); color:var(--ink); -webkit-font-smoothing:antialiased; }
+code, .mono { font-family:var(--mono); }
+
+    body { padding:44px 56px; display:grid; grid-template-columns: 1fr 520px; gap:32px; }
+    .card { background:var(--surface); border:1px solid rgba(11,11,11,.10); border-radius:16px; padding:28px 30px; }
+    .eyebrow { font:600 12px var(--mono); color:var(--blue); letter-spacing:.04em; }
+    h1 { font:700 26px/1.2 var(--sans); margin:6px 0 4px; }
+    .sub { color:var(--ink2); font-size:14.5px; }
+    .verdict { display:flex; gap:10px; align-items:center; margin:16px 0 14px; }
+    .pill { font:700 13px var(--sans); padding:5px 12px; border-radius:999px; letter-spacing:.03em; }
+    .blocked { background:#fbe9e9; color:#a32929; } .ready { background:#e6f4e6; color:var(--good-text); }
+    .count { font-size:13.5px; color:var(--ink2); } .count b { color:var(--ink); }
+    .row { display:grid; grid-template-columns: 26px 1fr; gap:12px; padding:9px 0; border-top:1px solid var(--hair); }
+    .ic { width:22px; height:22px; border-radius:50%; color:#fff; font:700 12px var(--sans);
+      display:flex; align-items:center; justify-content:center; margin-top:1px; }
+    .t { font:600 14.5px var(--sans); } .d { color:var(--ink2); font-size:13.5px; margin-top:1px; }
+    .fix { margin-top:6px; font-size:13.5px; background:#fdf3f3; border-left:3px solid var(--crit);
+      padding:6px 10px; border-radius:0 6px 6px 0; color:#5a1f1f; }
+    .side h2 { font:700 16px var(--sans); margin-bottom:10px; }
+    pre { font:12.2px/1.5 var(--mono); background:#1a1a19; color:#e8e7e0; border-radius:12px; padding:16px 18px;
+      overflow:hidden; white-space:pre-wrap; }
+    pre .k { color:#86b6ef; } pre .s { color:#a6d9a6; } pre .n { color:#f0b88a; }
+    .facts { margin-top:18px; font-size:13.5px; color:var(--ink2); line-height:1.55; }
+    .facts li { margin-left:18px; margin-bottom:4px; }
+    </style></head><body>
+    <div class='card'>
+      <div class='eyebrow'>preflight_submission · live App Store Connect · read-only</div>
+      <h1>DeepChamp: Live Sports Intel — 2.88 (1)</h1>
+      <div class='sub'>13 checks across App Store Connect, the local repo and the lint policy, each with a concrete fix.</div>
+      <div class='verdict'><span class='pill blocked'>BLOCKED</span>
+        <span class='count'><b>12</b> pass · <b>1</b> fail · <b>0</b> warn · <b>0</b> skip</span></div>
+      <div class='row'><div class='ic' style='background:var(--good)' aria-label='pass'>✓</div><div><div class='t'>App Store version exists</div><div class='d'>2.88 is WAITING_FOR_REVIEW.</div></div></div><div class='row'><div class='ic' style='background:var(--crit)' aria-label='fail'>✕</div><div><div class='t'>Version is editable</div><div class='d'>WAITING_FOR_REVIEW (waiting_for_review) cannot be submitted.</div><div class='fix'><b>Fix:</b> Already in the review pipeline; wait, or remove it from review in App Store Connect before changing it.</div></div></div><div class='row'><div class='ic' style='background:var(--good)' aria-label='pass'>✓</div><div><div class='t'>Build processed and VALID</div><div class='d'>Build 1 is VALID.</div></div></div><div class='row'><div class='ic' style='background:var(--good)' aria-label='pass'>✓</div><div><div class='t'>Build attached to version</div><div class='d'>Build 1 is attached to 2.88.</div></div></div><div class='row'><div class='ic' style='background:var(--good)' aria-label='pass'>✓</div><div><div class='t'>Export compliance answered</div><div class='d'>Build declares no non-exempt encryption.</div></div></div><div class='row'><div class='ic' style='background:var(--good)' aria-label='pass'>✓</div><div><div class='t'>What's New present</div><div class='d'>Present in the version's only locale (en-US).</div></div></div><div class='row'><div class='ic' style='background:var(--good)' aria-label='pass'>✓</div><div><div class='t'>What's New free of banned claims</div><div class='d'>No policy findings across 1 locale (policy: default).</div></div></div><div class='row'><div class='ic' style='background:var(--good)' aria-label='pass'>✓</div><div><div class='t'>App Review notes present</div><div class='d'>2585 characters of review notes.</div></div></div><div class='row'><div class='ic' style='background:var(--good)' aria-label='pass'>✓</div><div><div class='t'>Reviewer contact and demo account</div><div class='d'>Contact details set and demo account provided.</div></div></div><div class='row'><div class='ic' style='background:var(--good)' aria-label='pass'>✓</div><div><div class='t'>In-app purchases attached</div><div class='d'>No unattached products (49 checked, 8 attached or in review).</div></div></div><div class='row'><div class='ic' style='background:var(--good)' aria-label='pass'>✓</div><div><div class='t'>No other version in review</div><div class='d'>No open review submission holds a different version.</div></div></div><div class='row'><div class='ic' style='background:var(--good)' aria-label='pass'>✓</div><div><div class='t'>Build number monotonic vs AppVersion.xcconfig</div><div class='d'>Local 2.88 (1) is not behind the newest upload (1). Bump it before the next upload.</div></div></div><div class='row'><div class='ic' style='background:var(--good)' aria-label='pass'>✓</div><div><div class='t'>Release commit is on main</div><div class='d'>91c4… is contained in origin/main.</div></div></div>
+    </div>
+    <div class='side'>
+      <h2>What the agent receives</h2>
+      <pre>{
+  <span class="k">"verdict"</span>: <span class="s">"blocked"</span>,
+  <span class="k">"passed"</span>: <span class="n">12</span>,
+  <span class="k">"failed"</span>: <span class="n">1</span>,
+  <span class="k">"blocking"</span>: [
+    "version_editable"
+  ],
+  <span class="k">"checks"</span>: [
+    {
+      <span class="k">"id"</span>: <span class="s">"version_editable"</span>,
+      <span class="k">"title"</span>: <span class="s">"Version is editable"</span>,
+      <span class="k">"status"</span>: <span class="s">"fail"</span>,
+      <span class="k">"detail"</span>: <span class="s">"WAITING_FOR_REVIEW (waiting_for_review) cannot be submitted."</span>,
+      <span class="k">"fix"</span>: <span class="s">"Already in the review pipeline; wait, or remove it from review in App Store Connect before changing it."</span>,
+      <span class="k">"evidence"</span>: {}
+    },
+    "…12 more"
+  ]
+}</pre>
+      <ul class='facts'>
+        <li>Typed <code>structuredContent</code> validated against the tool's <code>outputSchema</code>, plus a JSON text mirror.</li>
+        <li>The verdict is computed by rules, not generated, so two runs agree.</li>
+        <li>The one failure is correct: 2.88 was already <b>waiting for review</b>, so it cannot be submitted again.</li>
+        <li>10 GET requests · 3.4 s · request id per tool call · review notes reduced to a length, demo account to a boolean.</li>
+      </ul>
+    </div></body></html>

@@ -46,33 +46,47 @@ def codex_bin() -> str:
     raise SystemExit("Codex CLI not found; set CODEX_BIN")
 
 
-def clean_codex_home() -> Path:
-    """A throwaway CODEX_HOME with only a symlink to the existing login."""
+PLUGIN = "release-guard@release-guard-local"
+
+
+def clean_codex_home(plugin: bool) -> Path:
+    """A throwaway CODEX_HOME with only a symlink to the existing login (plus, with
+    --plugin, this repo's local marketplace and the installed Release Guard plugin)."""
     real = Path(os.environ.get("CODEX_HOME") or Path.home() / ".codex")
     home = Path(tempfile.mkdtemp(prefix="rg-eval-codex-home-"))
     if not (real / "auth.json").exists():
         raise SystemExit("No Codex login found; run `codex login` first")
     (home / "auth.json").symlink_to(real / "auth.json")
+    if plugin:
+        env = dict(os.environ, CODEX_HOME=str(home))
+        for cmd in (["plugin", "marketplace", "add", str(HERE.parent)], ["plugin", "add", PLUGIN]):
+            subprocess.run([codex_bin(), *cmd], env=env, check=True, capture_output=True, text=True)
     return home
 
 
 def run_case(case: dict[str, Any], args: argparse.Namespace, codex_home: Path, out: Path) -> dict[str, Any]:
     work = Path(tempfile.mkdtemp(prefix="rg-eval-work-"))
     log_file = out / "server-logs" / f"{case['id']}.log"
-    env_table = (f'{{RELEASE_GUARD_BACKEND="demo",ASC_APP_ID="1234567890",'
-                 f'RELEASE_GUARD_LOG_FILE="{log_file}"}}')
-    cmd = [codex_bin(), "exec", "--json", "--ephemeral", "--ignore-user-config", "--skip-git-repo-check",
+    demo_env = {"RELEASE_GUARD_BACKEND": "demo", "ASC_APP_ID": "1234567890", "RELEASE_GUARD_LOG_FILE": str(log_file)}
+    cmd = [codex_bin(), "exec", "--json", "--ephemeral", "--skip-git-repo-check",
            "-s", "read-only", "-C", str(work), "-m", args.model,
            *[arg for feature in ISOLATE_FEATURES for arg in ("--disable", feature)],
            "-c", f'model_reasoning_effort="{args.effort}"',
-           "-c", 'approval_policy="never"',
-           "-c", f'mcp_servers.release_guard.command="{sys.executable}"',
-           "-c", 'mcp_servers.release_guard.args=["-m","release_guard"]',
-           "-c", f"mcp_servers.release_guard.env={env_table}",
-           "-c", 'mcp_servers.release_guard.default_tools_approval_mode="approve"',
-           case["prompt"]]
-    started = time.monotonic()
+           "-c", 'approval_policy="never"']
     env = dict(os.environ, CODEX_HOME=str(codex_home))
+    if args.plugin:
+        # The installed plugin launches `release-guard-mcp` and forwards env_vars from this environment.
+        env.update(demo_env, PATH=f"{Path(sys.executable).parent}{os.pathsep}{env.get('PATH', '')}")
+        cmd += ["-c", f'plugins."{PLUGIN}".mcp_servers.release_guard.default_tools_approval_mode="approve"']
+    else:
+        table = "{" + ",".join(f'{k}="{v}"' for k, v in demo_env.items()) + "}"
+        cmd += ["--ignore-user-config",
+                "-c", f'mcp_servers.release_guard.command="{sys.executable}"',
+                "-c", 'mcp_servers.release_guard.args=["-m","release_guard"]',
+                "-c", f"mcp_servers.release_guard.env={table}",
+                "-c", 'mcp_servers.release_guard.default_tools_approval_mode="approve"']
+    cmd.append(case["prompt"])
+    started = time.monotonic()
     try:
         proc = subprocess.run(cmd, capture_output=True, text=True, timeout=args.timeout, env=env, check=False,
                               stdin=subprocess.DEVNULL)
@@ -115,18 +129,21 @@ def main() -> int:
     parser.add_argument("--concurrency", type=int, default=4)
     parser.add_argument("--timeout", type=int, default=300)
     parser.add_argument("--only", nargs="*", help="case ids to run")
+    parser.add_argument("--plugin", action="store_true",
+                        help="install the Codex plugin (MCP server + skill) instead of a bare MCP server entry")
+    parser.add_argument("--label", default="", help="suffix for the run directory, e.g. v2-plugin")
     args = parser.parse_args()
 
     cases = load_jsonl(HERE / "cases.jsonl")
     if args.only:
         cases = [c for c in cases if c["id"] in set(args.only)]
     stamp = time.strftime("%Y%m%d-%H%M%S")
-    out = HERE / "runs" / f"{stamp}-{args.model}-{args.effort}"
+    out = HERE / "runs" / f"{stamp}-{args.model}-{args.effort}{'-' + args.label if args.label else ''}"
     (out / "events").mkdir(parents=True)
     (out / "server-logs").mkdir()
     version = subprocess.run([codex_bin(), "--version"], capture_output=True, text=True,
                              check=False).stdout.strip()
-    home = clean_codex_home()
+    home = clean_codex_home(args.plugin)
     try:
         with cf.ThreadPoolExecutor(max_workers=args.concurrency) as pool:
             futures = {pool.submit(run_case, c, args, home, out): c["id"] for c in cases}
@@ -147,6 +164,7 @@ def main() -> int:
     meta = {"codex_cli": version, "model": args.model, "reasoning_effort": args.effort,
             "backend": "demo (fake App Store Connect, no network)", "run": out.name,
             "disabled_features": list(ISOLATE_FEATURES),
+            "packaging": "Codex plugin (MCP server + skill)" if args.plugin else "MCP server entry (-c mcp_servers.*)",
             "median_seconds": sorted(p["seconds"] for p in preds)[len(preds) // 2] if preds else None,
             "shell_commands_run": sum(p["commands"] for p in preds)}
     result = {"meta": meta, **{k: v for k, v in summary.items() if k != "rows"}, "rows": summary["rows"]}

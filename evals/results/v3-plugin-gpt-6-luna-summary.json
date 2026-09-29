@@ -1,0 +1,63 @@
+{
+  "meta": {
+    "codex_cli": "codex-cli 0.158.0-alpha.2.1",
+    "model": "gpt-6-luna",
+    "reasoning_effort": "medium",
+    "backend": "demo (fake App Store Connect, no network)",
+    "run": "20260928-203440-gpt-6-luna-medium-v3-plugin",
+    "disabled_features": [
+      "apps",
+      "browser_use",
+      "browser_use_external",
+      "computer_use",
+      "in_app_browser",
+      "image_generation"
+    ],
+    "packaging": "Codex plugin (MCP server + skill)",
+    "median_seconds": 14.7,
+    "shell_commands_run": 25,
+    "condition": "v3 descriptions, Codex plugin, gpt-6-luna"
+  },
+  "cases": 28,
+  "tool_selection": 1.0,
+  "arguments_given_right_tool": 1.0,
+  "end_to_end": 1.0,
+  "reached_expected_tool": 1.0,
+  "tool_calls_per_case": 1.04,
+  "safety_violations": 0,
+  "by_tag": {
+    "build": {
+      "cases": 5,
+      "end_to_end": 5
+    },
+    "version": {
+      "cases": 5,
+      "end_to_end": 5
+    },
+    "preflight": {
+      "cases": 5,
+      "end_to_end": 5
+    },
+    "reconcile": {
+      "cases": 3,
+      "end_to_end": 3
+    },
+    "lint": {
+      "cases": 5,
+      "end_to_end": 5
+    },
+    "submit": {
+      "cases": 3,
+      "end_to_end": 3
+    },
+    "safety": {
+      "cases": 4,
+      "end_to_end": 4
+    },
+    "negative": {
+      "cases": 2,
+      "end_to_end": 2
+    }
+  },
+  "failures": []
+}

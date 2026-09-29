@@ -384,7 +384,21 @@ async def test_tool_logs_are_structured_and_secret_free(fake: FakeApple, key_fil
     events = [json.loads(line) for line in err.splitlines() if line.startswith("{")]
     names = [e["event"] for e in events]
     assert names[:1] == ["tool_call"] and "http_request" in names and names[-1] == "tool_result"
+    assert events[-1]["http_calls"] == 1 and events[-1]["verdict"] == "PROCESSING"
     rids = {e["request_id"] for e in events}
     assert len(rids) == 1 and re.fullmatch(r"rg-[0-9a-f]{10}", rids.pop())
     for secret in ("KEYID12345", "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee", "eyJ", "PRIVATE KEY"):
         assert secret not in err
+
+
+async def test_concurrent_tool_calls_count_their_own_requests(fake: FakeApple,
+                                                              capsys: pytest.CaptureFixture[str]) -> None:
+    import anyio
+
+    async with Client(create_server(make_runtime(fake))) as client, anyio.create_task_group() as tg:
+        tg.start_soon(client.call_tool, "check_build_status", {"version": "2.4.0"})
+        tg.start_soon(client.call_tool, "check_version_state", {})
+    results = {e["tool"]: e["http_calls"] for e in
+               (json.loads(line) for line in capsys.readouterr().err.splitlines() if line.startswith("{"))
+               if e["event"] == "tool_result"}
+    assert results == {"check_build_status": 1, "check_version_state": 3}

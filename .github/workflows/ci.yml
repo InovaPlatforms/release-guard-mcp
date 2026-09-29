@@ -24,7 +24,7 @@ jobs:
       - name: Unit and contract tests (no network)
         run: .venv/bin/python -m pytest -q
       - name: Re-score the recorded Codex eval run
-        run: .venv/bin/python evals/score.py evals/results/codex-predictions.jsonl --min-end-to-end 0.9
+        run: .venv/bin/python evals/score.py evals/results/v3-plugin-predictions.jsonl --min-end-to-end 0.9
 
   secrets:
     runs-on: ubuntu-latest

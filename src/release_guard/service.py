@@ -383,7 +383,8 @@ class ReleaseGuard:
                                    evidence={"warnings": warnings}))
         elif any(t.strip() for t in texts.values()):
             out.append(CheckResult(id="whats_new_policy", title="What's New free of banned claims", status="pass",
-                                   detail=f"No policy findings across {len(texts)} locales "
+                                   detail=f"No policy findings across {len(texts)} "
+                                          f"{'locale' if len(texts) == 1 else 'locales'} "
                                           f"(policy: {self.rt.policy.source})."))
         return out
 

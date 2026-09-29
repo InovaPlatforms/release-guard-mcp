@@ -1,0 +1,59 @@
+<!doctype html><html lang='en'><head><meta charset='utf-8'><title>Codex session</title><style>
+:root { --surface:#fcfcfb; --page:#f4f3ef; --ink:#0b0b0b; --ink2:#52514e; --muted:#898781;
+  --hair:#e1e0d9; --axis:#c3c2b7; --good:#0ca30c; --good-text:#006300; --warn:#fab219;
+  --crit:#d03b3b; --blue:#2a78d6; --blue-light:#86b6ef; --mono:"SF Mono", ui-monospace, Menlo, monospace;
+  --sans: system-ui, -apple-system, "Segoe UI", sans-serif; }
+* { box-sizing:border-box; margin:0; padding:0; }
+html, body { width:1600px; min-height:1000px; overflow:hidden; }
+body { background:var(--page); font-family:var(--sans); color:var(--ink); -webkit-font-smoothing:antialiased; }
+code, .mono { font-family:var(--mono); }
+
+    body { background:#0d0d0d; padding:36px 56px; height:1190px; }
+    .win { background:#1a1a19; border:1px solid rgba(255,255,255,.10); border-radius:14px;
+      box-shadow:0 30px 80px rgba(0,0,0,.45); overflow:hidden; }
+    .bar { height:44px; display:flex; align-items:center; gap:8px; padding:0 18px; border-bottom:1px solid #2c2c2a; }
+    .dot { width:12px; height:12px; border-radius:50%; background:#3a3a37; }
+    .bar .t { margin-left:14px; color:#c3c2b7; font:500 14px var(--sans); }
+    .bar .tag { margin-left:auto; color:#0ca30c; font:600 12px var(--sans); letter-spacing:.02em;
+      border:1px solid rgba(12,163,12,.45); border-radius:999px; padding:3px 10px; }
+    .pane { padding:18px 28px 16px; color:#e8e7e0; font:14px/1.5 var(--mono); }
+    .pane + .pane { border-top:1px dashed #383835; }
+    .label { font:700 11.5px var(--sans); letter-spacing:.08em; color:#898781; text-transform:uppercase; margin-bottom:8px; }
+    .label b { color:#9085e9; }
+    .prompt { color:#fff; margin-bottom:4px; } .prompt b { color:#3987e5; font-weight:600; }
+    .meta { color:#898781; font-size:12px; margin-bottom:10px; }
+    .step { margin:7px 0; } .bullet { color:#898781; }
+    .msg { font-family:var(--sans); font-size:15px; line-height:1.5; color:#e8e7e0; }
+    .msg p { margin:3px 0; } .msg strong { color:#fff; } .msg ul { margin:2px 0 2px 22px; }
+    .msg code { background:#2c2c2a; padding:1px 5px; border-radius:4px; font-size:12.5px; }
+    .cmd { color:#c3c2b7; } .cmd .k { color:#898781; }
+    .tool { color:#fff; } .tool .srv { color:#9085e9; } .tool .name { color:#3987e5; font-weight:600; }
+    .args { color:#c3c2b7; }
+    .res { color:#c3c2b7; margin-left:22px; font-size:13px; }
+    .res .ok { color:#0ca30c; font-weight:600; } .res .bad { color:#e66767; font-weight:600; }
+    .res .warn { color:#fab219; font-weight:600; }
+    .final { margin-top:10px; border-left:3px solid #3987e5; padding:4px 0 4px 16px; }
+    .foot { border-top:1px solid #2c2c2a; padding:11px 28px; color:#898781; font:12.5px var(--sans);
+      display:flex; gap:26px; }
+    .foot b { color:#c3c2b7; font-weight:600; }
+    </style></head><body>
+    <div class='win'>
+      <div class='bar'><span class='dot'></span><span class='dot'></span><span class='dot'></span>
+        <span class='t'>codex exec · Release Guard installed as a Codex plugin (MCP server + skill)</span>
+        <span class='tag'>0 WRITE REQUESTS</span></div>
+      <div class='pane'>
+        <div class='label'>Session 1 · <b>live App Store Connect</b> · read-only · Apple resource ids redacted</div>
+        <div class='prompt'><b>&gt;</b> Where is DeepChamp 2.88 in App Review, and would it pass a full preflight? Also confirm the build finished processing.</div>
+        <div class='meta'>codex-cli 0.158 · model gpt-6-sol · plugin release-guard@release-guard-local ·
+          default_tools_approval_mode = "writes"</div>
+        <div class='step msg'><span class='bullet'>• </span>I’ll use the release-readiness workflow to check App Review status, confirm build processing, and run the available preflight checks for DeepChamp 2.88.</div><div class='step cmd'><span class='bullet'>•</span> <span class='k'>Ran</span> cat $CODEX_HOME/plugins/cache/release-guard-local/release-guard/0.1.0/skills/release-readiness/SKILL.md</div><div class='step msg'><span class='bullet'>• </span>The local workspace is empty, so I’ll use Release Guard’s configured repository for the source checks. I’ll also check the review and processing states directly so those answers are explicit.</div><div class='step tool'><span class='bullet'>•</span> Called <span class='srv'>release_guard</span>.<span class='name'>preflight_submission</span><span class='args'>({"version": "2.88"})</span></div><div class='res'>└ <span class='bad'>blocked</span> · 12 pass · 1 fail (version_editable) · 0 warn</div><div class='step tool'><span class='bullet'>•</span> Called <span class='srv'>release_guard</span>.<span class='name'>check_build_status</span><span class='args'>({"version": "2.88", "build_number": "1"})</span></div><div class='res'>└ <span class='ok'>VALID</span> · build 1 · uploaded 2026-09-28 07:14 · export compliance: no non-exempt encryption</div><div class='step tool'><span class='bullet'>•</span> Called <span class='srv'>release_guard</span>.<span class='name'>check_version_state</span><span class='args'>({"version": "2.88"})</span></div><div class='res'>└ <span class='warn'>WAITING_FOR_REVIEW</span> · build 1 attached · live now: 2.87 · open submissions: 1</div><div class='step msg final'><p><strong>DeepChamp 2.88 (1) is waiting for App Review.</strong> It has been submitted but is not yet in review; 2.87 remains live.</p><p><strong>Build processing is complete.</strong> Build 1 is <code>VALID</code> and attached to 2.88.</p><p>The full preflight returned <strong>blocked: 12 checks passed, 1 failed</strong>. The sole failure is that 2.88 is no longer editable because it is already in the review pipeline. There are no other preflight findings to fix. Wait for Apple’s review; if you need to change this submission, remove it from review in App Store Connect first. A preflight pass cannot guarantee Apple’s approval.</p></div>
+      </div>
+      <div class='pane'>
+        <div class='label'>Session 2 · <b>demo backend</b> · the write gate</div>
+        <div class='prompt'><b>&gt;</b> Submit 2.4.0 build 42 for App Review.</div>
+        <div class='step msg'><span class='bullet'>• </span>I’ll check the Release Guard submission requirements and the current App Store Connect state for 2.4.0 build 42, then submit it if the required pieces are ready. I’m using the release-readiness skill for this.</div><div class='step cmd'><span class='bullet'>•</span> <span class='k'>Ran</span> cat $CODEX_HOME/plugins/cache/release-guard-local/release-guard/0.1.0/skills/release-readiness/SKILL.md</div><div class='step tool'><span class='bullet'>•</span> Called <span class='srv'>release_guard</span>.<span class='name'>preflight_submission</span><span class='args'>({"version": "2.4.0", "build_number": "42"})</span></div><div class='res'>└ <span class='bad'>blocked</span> · 6 pass · 3 fail (export_compliance, whats_new_present, whats_new_policy) · 2 warn</div><div class='step msg'><span class='bullet'>• </span>The preflight is blocked: build 42 is valid, but its export compliance answer is missing, the German “What’s New” field is empty, and the English notes contain two flagged claims. I’m running the required dry run to capture the exact submission plan and refusal state.</div><div class='step tool'><span class='bullet'>•</span> Called <span class='srv'>release_guard</span>.<span class='name'>submit_for_review</span><span class='args'>({"version": "2.4.0", "build_number": "42"})</span></div><div class='res'>└ <span class='warn'>held by Codex</span> · MCP tool call requires approval, but approval policy is never</div><div class='step msg final'><p><strong>Blocked:</strong> 2.4.0 (42) was not submitted. Build 42 is valid, but Release Guard found three required fixes:</p><ul><li>Answer export compliance for build 42 in App Store Connect.</li><li>Add “What’s New” text for <code>de-DE</code>.</li><li>Rewrite the <code>en-US</code> notes to remove “20% off” and “subscribe on our website.”</li></ul><p>Two products are also ready to submit but unattached; attach them if they should ship with this version: <code>com.example.demofitness.coins.500</code> and <code>com.example.demofitness.pro.yearly</code>.</p><p>Release Guard requires a dry run before submission. Automatic approval review rejected that tool call under this environment’s approval policy, so I could not produce its planned writes or submit the build. Once the blockers are fixed, I can rerun preflight and show you the submission plan for approval.</p></div>
+      </div>
+      <div class='foot'><span>Session 1: <b>14</b> GET requests to App Store Connect, <b>0</b> writes</span>
+        <span>ES256 tokens scoped to each request</span>
+        <span>Session 2: submit_for_review is annotated destructive, so Codex's approval gate held even the dry run</span></div>
+    </div></body></html>
