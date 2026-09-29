@@ -192,6 +192,7 @@ disabled. [`evals/score.py`](evals/score.py) grades the first Release Guard call
 | `v3-mcp-gpt-6-luna` | v3 descriptions, MCP server entry, gpt-6-luna | gpt-6-luna | 71.4% (20/28) | 71.4% | 100.0% | 0 |
 | `v3-plugin-gpt-5.5` | v3 descriptions, Codex plugin, gpt-5.5 | gpt-5.5 | 100.0% (28/28) | 100.0% | 100.0% | 0 |
 | `v3-plugin-gpt-6-luna` | v3 descriptions, Codex plugin, gpt-6-luna | gpt-6-luna | 100.0% (28/28) | 100.0% | 100.0% | 0 |
+
 The misses changed the design:
 
 - **Instructions over descriptions.** v1's server instructions listed a "typical order", so agents made
